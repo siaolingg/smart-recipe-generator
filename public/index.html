@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Recipe Generator - Masak dari Bahan di Kulkas</title>
+  <!-- Google Fonts (Outfit & Plus Jakarta Sans via UI/UX Pro Max) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <!-- Ambient Decorative Background Orbs -->
+  <div class="ambient-glow-orb ambient-glow-1"></div>
+  <div class="ambient-glow-orb ambient-glow-2"></div>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="/">
+        <span class="brand-icon-badge"><i class="bi bi-egg-fried"></i></span>
+        <span>Smart Recipe Generator</span>
+      </a>
+      <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto align-items-center gap-2">
+          <li class="nav-item">
+            <a class="nav-link active" href="/">Beranda</a>
+          </li>
+          <!-- Dynamic Auth Links -->
+          <li class="nav-item d-none" id="nav-resep-saya">
+            <a class="nav-link" href="/resep-saya.html">
+              <i class="bi bi-journal-bookmark me-1"></i> Resep Saya
+            </a>
+          </li>
+          <li class="nav-item d-none" id="nav-user-info">
+            <span class="navbar-text fw-semibold text-secondary px-2" id="nav-user-name"></span>
+          </li>
+          <li class="nav-item d-none" id="nav-btn-logout">
+            <button class="btn btn-outline-danger btn-sm" id="btn-logout-trigger">
+              <i class="bi bi-box-arrow-right me-1"></i> Keluar
+            </button>
+          </li>
+          <li class="nav-item" id="nav-btn-login">
+            <a class="btn btn-outline-primary btn-sm" href="/login.html">Masuk</a>
+          </li>
+          <li class="nav-item" id="nav-btn-register">
+            <a class="btn btn-primary btn-sm" href="/register.html">Daftar</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Container -->
+  <main class="container py-4">
+    <!-- Hero Intro Banner -->
+    <div class="hero-intro mb-4 text-center text-md-start d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+      <div>
+        <h2 class="hero-title mb-1">Masak Lezat dari Bahan di Kulkasmu</h2>
+        <p class="text-muted mb-0">Tentukan bahan, batas waktu, dan pantangan — AI meracik resep presisi 100% bebas alergi.</p>
+      </div>
+      <div class="d-flex align-items-center gap-2 justify-content-center justify-content-md-end">
+        <span class="badge-status-dot"><span class="status-dot"></span> Gemini Flash Aktif</span>
+      </div>
+    </div>
+
+    <!-- Feature Highlights Strip -->
+    <div class="features-strip mb-4">
+      <div class="feature-highlight-card">
+        <div class="feature-icon-box orange">
+          <i class="bi bi-shield-check"></i>
+        </div>
+        <div>
+          <h6 class="fw-bold mb-0" style="font-size: 0.92rem;">100% Bebas Alergi</h6>
+          <small class="text-muted" style="font-size: 0.8rem;">Pengecekan pantangan & alergen ketat</small>
+        </div>
+      </div>
+      <div class="feature-highlight-card">
+        <div class="feature-icon-box emerald">
+          <i class="bi bi-stopwatch"></i>
+        </div>
+        <div>
+          <h6 class="fw-bold mb-0" style="font-size: 0.92rem;">Smart Companion</h6>
+          <small class="text-muted" style="font-size: 0.8rem;">Panduan suara (TTS) & Smart Step Timer</small>
+        </div>
+      </div>
+      <div class="feature-highlight-card">
+        <div class="feature-icon-box sky">
+          <i class="bi bi-recycle"></i>
+        </div>
+        <div>
+          <h6 class="fw-bold mb-0" style="font-size: 0.92rem;">Zero Food Waste</h6>
+          <small class="text-muted" style="font-size: 0.8rem;">Kreasi lezat maksimalkan isi kulkasmu</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <!-- Left Column: Specification Form (UC-04) -->
+      <div class="col-lg-5 col-md-12">
+        <div class="card card-custom p-4">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="fw-bold mb-0">
+              <i class="bi bi-sliders2 me-2 text-primary"></i>Spesifikasi Resep
+            </h5>
+            <button type="button" class="btn btn-sm btn-outline-secondary" id="btn-isi-contoh">
+              <i class="bi bi-magic me-1"></i>Isi Contoh
+            </button>
+          </div>
+
+          <!-- Quota & Access Level Info Banner (F-09) -->
+          <div id="quota-info-banner" class="small mb-3 py-1 px-2 rounded-2 bg-light text-muted border d-flex align-items-center justify-content-between">
+            <span id="quota-info-text"><i class="bi bi-person me-1"></i> Mode Tamu: Jatah 5 resep/mnt & 1 variasi/resep</span>
+            <a href="/login.html" id="quota-info-link" class="fw-semibold text-primary ms-2 small">Masuk</a>
+          </div>
+
+          <form id="form-spesifikasi" novalidate>
+            <!-- 1. Bahan Utama (BR-01) -->
+            <div class="mb-3">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <label class="form-label fw-semibold mb-0">Bahan di Kulkasmu</label>
+                <small class="text-muted" id="bahan-counter">0/15 bahan</small>
+              </div>
+              <div class="chips-container" id="chips-container">
+                <input type="text" class="chip-input" id="chip-input" placeholder="Ketik bahan, tekan Enter...">
+              </div>
+              <small class="text-muted d-block mt-1">
+                Pisahkan dengan koma atau Enter. Minimal 1 bahan, maks. 15.
+              </small>
+
+              <!-- Quick Ingredient Suggestions -->
+              <div class="quick-ingredients-wrapper mt-2">
+                <span class="text-muted small d-block mb-1 fw-semibold" style="font-size: 0.78rem;">Pilihan bahan cepat kulkas:</span>
+                <div class="d-flex flex-wrap gap-1" id="quick-ingredient-chips">
+                  <button type="button" class="quick-ingredient-chip" data-ingredient="ayam">🍗 Ayam</button>
+                  <button type="button" class="quick-ingredient-chip" data-ingredient="telur">🥚 Telur</button>
+                  <button type="button" class="quick-ingredient-chip" data-ingredient="bawang merah">🧅 Bawang Merah</button>
+                  <button type="button" class="quick-ingredient-chip" data-ingredient="bawang putih">🧄 Bawang Putih</button>
+                  <button type="button" class="quick-ingredient-chip" data-ingredient="wortel">🥕 Wortel</button>
+                  <button type="button" class="quick-ingredient-chip" data-ingredient="tahu">🧈 Tahu</button>
+                  <button type="button" class="quick-ingredient-chip" data-ingredient="tempe">🌱 Tempe</button>
+                  <button type="button" class="quick-ingredient-chip" data-ingredient="nasi">🍚 Nasi</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 2. Waktu Maksimal (BR-02) -->
+            <div class="mb-3">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <label class="form-label fw-semibold mb-0">Waktu Memasak Maksimal</label>
+                <span class="badge bg-primary fs-6" id="waktu-display">30 menit</span>
+              </div>
+              <div class="d-flex align-items-center gap-3">
+                <input type="range" class="form-range" id="waktu-slider" min="5" max="180" step="5" value="30">
+                <input type="number" class="form-control form-control-sm text-center" id="waktu-number" min="5" max="180" value="30" style="width: 75px;">
+              </div>
+              <small class="text-muted d-block mt-1">Rentang: 5 sampai 180 menit.</small>
+            </div>
+
+            <!-- 3. Pantangan / Alergi (BR-03) -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold mb-1">Pantangan / Alergi (Opsional)</label>
+              <div class="d-flex flex-wrap" id="pantangan-pills-container">
+                <div class="restriction-pill">
+                  <input type="checkbox" id="pantangan-kacang" value="tanpa kacang">
+                  <label for="pantangan-kacang">Tanpa Kacang</label>
+                </div>
+                <div class="restriction-pill">
+                  <input type="checkbox" id="pantangan-susu" value="tanpa susu">
+                  <label for="pantangan-susu">Tanpa Susu</label>
+                </div>
+                <div class="restriction-pill">
+                  <input type="checkbox" id="pantangan-telur" value="tanpa telur">
+                  <label for="pantangan-telur">Tanpa Telur</label>
+                </div>
+                <div class="restriction-pill">
+                  <input type="checkbox" id="pantangan-seafood" value="tanpa seafood">
+                  <label for="pantangan-seafood">Tanpa Seafood</label>
+                </div>
+                <div class="restriction-pill">
+                  <input type="checkbox" id="pantangan-gluten" value="tanpa gluten">
+                  <label for="pantangan-gluten">Tanpa Gluten</label>
+                </div>
+                <div class="restriction-pill">
+                  <input type="checkbox" id="pantangan-rendah-karbo" value="rendah karbo">
+                  <label for="pantangan-rendah-karbo">Rendah Karbo</label>
+                </div>
+                <div class="restriction-pill">
+                  <input type="checkbox" id="pantangan-vegetarian" value="vegetarian">
+                  <label for="pantangan-vegetarian">Vegetarian</label>
+                </div>
+              </div>
+
+              <!-- Custom restriction -->
+              <div class="input-group input-group-sm mt-2">
+                <input type="text" class="form-control" id="custom-pantangan-input" placeholder="Ketik pantangan lain (contoh: tanpa seledri)">
+                <button class="btn btn-outline-secondary" type="button" id="btn-add-custom-pantangan">Tambah</button>
+              </div>
+              <div class="d-flex flex-wrap gap-1 mt-2" id="custom-pantangan-list"></div>
+              <!-- F-12: Save to Profile Button -->
+              <button type="button" class="btn btn-sm btn-outline-primary mt-2 d-none" id="btn-save-dietary-profile">
+                <i class="bi bi-bookmark-heart me-1"></i> Simpan Pilihan ke Profil Pantangan
+              </button>
+            </div>
+
+            <!-- Conflict Warning Banner (BR-04, US-08) -->
+            <div class="alert alert-warning d-none py-2 px-3 mb-3" id="conflict-warning" role="alert">
+              <i class="bi bi-exclamation-triangle-fill me-2"></i>
+              <span id="conflict-warning-text"></span>
+            </div>
+
+            <!-- Validation Error Banner -->
+            <div class="alert alert-danger d-none py-2 px-3 mb-3" id="validation-warning" role="alert">
+              <i class="bi bi-x-circle-fill me-2"></i>
+              <span id="validation-warning-text"></span>
+            </div>
+
+            <!-- Submit Button (UC-05) -->
+            <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold fs-5" id="btn-buat-resep">
+              <i class="bi bi-lightning-charge-fill me-1"></i> Buat Resep
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Right Column: Recipe Result / States (UC-06) -->
+      <div class="col-lg-7 col-md-12">
+        <!-- 1. Empty State (Elevated Culinary Preview Canvas) -->
+        <div class="card card-custom p-4 p-md-5 text-center empty-state-card" id="state-empty">
+          <div class="py-2">
+            <!-- Floating Decorative Preview Component -->
+            <div class="mini-companion-preview mb-3 empty-preview-badge-floating">
+              <div class="d-flex align-items-center justify-content-center rounded-3 bg-light p-2" style="width: 48px; height: 48px;">
+                <span class="fs-3">🍳</span>
+              </div>
+              <div class="text-start">
+                <div class="d-flex align-items-center gap-1 mb-1">
+                  <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle rounded-pill px-2 py-0" style="font-size: 0.72rem;">✨ AI Preview</span>
+                  <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-2 py-0" style="font-size: 0.72rem;">⏱️ 10:00 Auto Timer</span>
+                </div>
+                <div class="fw-semibold text-dark small">Panduan Suara & Smart Timer Interaktif</div>
+              </div>
+            </div>
+
+            <h4 class="fw-bold mt-2">Dapurmu Siap Berkreasi</h4>
+            <p class="text-muted mx-auto mb-4" style="max-width: 440px;">
+              Ketik bahan yang tersisa di kulkasmu, tentukan batas waktu memasak, lalu tekan <strong class="text-primary">Buat Resep</strong>.
+            </p>
+
+            <div class="d-flex justify-content-center flex-wrap gap-2 pt-2">
+              <span class="text-muted small align-self-center me-1 fw-semibold">Rekomendasi Cepat:</span>
+              <button type="button" class="sample-pill-btn" data-bahan="ayam, telur, bawang merah" data-waktu="30" data-pantangan="tanpa kacang">🍗 Ayam & Telur (30m)</button>
+              <button type="button" class="sample-pill-btn" data-bahan="tahu, tempe, kecap manis" data-waktu="25" data-pantangan="vegetarian">🧈 Tahu & Tempe (25m)</button>
+              <button type="button" class="sample-pill-btn" data-bahan="nasi, telur, wortel, bawang" data-waktu="15" data-pantangan="">🍚 Nasi Goreng (15m)</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Loading State -->
+        <div class="card card-custom p-5 text-center d-none" id="state-loading">
+          <div class="py-5">
+            <div class="spinner-border text-primary spinner-pulse mb-3" style="width: 3.5rem; height: 3.5rem;" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <h4 class="fw-bold text-primary mb-2">Meracik resep sesuai spesifikasimu…</h4>
+            <p class="text-muted mt-1 mx-auto" style="max-width: 440px;" id="loading-tip-text">
+              Gemini AI menyusun resep dan sistem memeriksa kepatuhan spesifikasi secara ketat.
+            </p>
+            <div class="cooking-progress-wrapper mt-4 mx-auto" style="max-width: 320px;">
+              <div class="progress">
+                <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" style="width: 100%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Error State -->
+        <div class="card card-custom p-4 d-none" id="state-error">
+          <div class="alert alert-danger mb-0" role="alert">
+            <div class="d-flex align-items-center">
+              <i class="bi bi-exclamation-octagon-fill fs-2 me-3"></i>
+              <div>
+                <h5 class="alert-heading fw-bold mb-1" id="error-title">Gagal Membuat Resep</h5>
+                <p class="mb-0" id="error-message">Terjadi kesalahan.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Success State: Recipe Card (UC-06, F-06) -->
+        <div class="card card-custom p-4 d-none animate-card-reveal" id="state-success">
+          <!-- Header: Title & Time -->
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <h3 class="fw-bold mb-0 text-dark" id="recipe-title"></h3>
+            <span class="badge bg-light text-dark border fs-6 px-3 py-2">
+              <i class="bi bi-clock me-1 text-primary"></i>
+              <span id="recipe-time"></span>
+            </span>
+          </div>
+
+          <!-- Compliance Badges (US-14) -->
+          <div class="compliance-badge-group mt-3" id="compliance-badges">
+            <span class="badge-compliance" id="badge-waktu">
+              <i class="bi bi-check-circle-fill text-success"></i>
+              <span id="badge-waktu-text">Waktu ≤ 30 menit</span>
+            </span>
+            <span class="badge-compliance" id="badge-bahan">
+              <i class="bi bi-check-circle-fill text-success"></i>
+              <span>Hanya bahan yang diizinkan</span>
+            </span>
+            <span class="badge-compliance" id="badge-pantangan">
+              <i class="bi bi-check-circle-fill text-success"></i>
+              <span>Bebas pantangan</span>
+            </span>
+            <!-- F-10, KF-20: Auto Saved to History Badge -->
+            <span class="badge-compliance d-none" id="badge-auto-saved" style="background-color: #ecfdf5; border-color: #a7f3d0; color: #059669;">
+              <i class="bi bi-cloud-check-fill text-success"></i>
+              <span>Tersimpan di Riwayat</span>
+            </span>
+          </div>
+
+          <hr class="my-3">
+
+          <!-- Ingredients List with Checkboxes -->
+          <div class="mb-4">
+            <h5 class="fw-bold mb-3">
+              <i class="bi bi-card-checklist me-2 text-primary"></i>Daftar Bahan:
+            </h5>
+            <div id="recipe-ingredients-list" class="ps-1"></div>
+          </div>
+
+          <!-- Cooking Steps with Checkboxes -->
+          <div class="mb-4">
+            <h5 class="fw-bold mb-3">
+              <i class="bi bi-fire me-2 text-primary"></i>Langkah Memasak:
+            </h5>
+            <div id="recipe-steps-list" class="ps-1"></div>
+          </div>
+
+          <!-- Action Buttons (F-06, F-08, US-15, US-17) -->
+          <div class="d-flex flex-wrap gap-2 pt-2 border-top">
+            <button type="button" class="btn btn-primary fw-semibold" id="btn-mulai-memasak">
+              <i class="bi bi-play-circle-fill me-1"></i> Mulai Memasak
+            </button>
+            <button type="button" class="btn btn-success fw-semibold" id="btn-simpan-resep">
+              <i class="bi bi-bookmark-plus me-1"></i> <span id="label-simpan-resep">Simpan Resep</span>
+            </button>
+            <button type="button" class="btn btn-outline-secondary fw-semibold" id="btn-buat-ulang">
+              <i class="bi bi-arrow-repeat me-1"></i> Buat Ulang
+            </button>
+          </div>
+
+          <!-- F-11, KF-21: Catatan Pribadi (Notepad) Langsung -->
+          <div id="inline-note-container" class="mt-4 pt-3 border-top d-none">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <label class="form-label fw-bold mb-0 small text-dark"><i class="bi bi-journal-text text-primary me-1"></i> Catatan Pribadi (Privat):</label>
+              <small class="text-muted" id="inline-note-counter">0/1000</small>
+            </div>
+            <p class="text-muted small mb-2" style="font-size: 0.78rem;">Catatan ini hanya tersimpan untuk Anda dan <strong>tidak pernah dikirim ke AI</strong>.</p>
+            <textarea class="form-control form-control-sm" id="inline-note-input" rows="2" maxlength="1000" placeholder="Tulis catatan atau modifikasi rahasia resep ini..."></textarea>
+            <div class="d-flex justify-content-end mt-2">
+              <button type="button" class="btn btn-sm btn-primary" id="btn-save-inline-note">
+                <i class="bi bi-check2 me-1"></i> Simpan Catatan
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Inspirasi Resep Populer Showcase Section -->
+    <section class="inspiration-section">
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3">
+        <div>
+          <h4 class="fw-bold mb-1 d-flex align-items-center gap-2">
+            <span class="fs-4">💡</span> Inspirasi Kreasi Cepat Hari Ini
+          </h4>
+          <p class="text-muted mb-0 small">
+            Butuh ide masakan praktis? Klik resep inspirasi di bawah untuk mengisi bahan dan spesifikasi secara otomatis.
+          </p>
+        </div>
+        <span class="badge bg-light text-secondary border px-3 py-2 align-self-start align-self-md-center">
+          <i class="bi bi-lightning-charge-fill text-warning me-1"></i> Siap Masak 1-Klik
+        </span>
+      </div>
+
+      <div class="inspiration-grid">
+        <!-- Inspiration Card 1 -->
+        <div class="inspiration-card">
+          <div>
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <span class="badge bg-orange-subtle text-orange border border-warning-subtle inspiration-badge-category">
+                🍳 Menumis
+              </span>
+              <span class="text-muted small fw-semibold">
+                <i class="bi bi-clock me-1 text-primary"></i> 20 mnt
+              </span>
+            </div>
+            <h5 class="fw-bold mb-1 text-dark">Ayam Tumis Bawang Gurih</h5>
+            <p class="text-muted small mb-3">
+              Potongan ayam empuk dengan keharuman tumisan bawang merah, bawang putih, dan lada gurih yang meresap sempurna.
+            </p>
+            <div class="d-flex flex-wrap gap-1 mb-3">
+              <span class="badge bg-light text-dark border">🍗 Ayam</span>
+              <span class="badge bg-light text-dark border">🧅 Bawang Merah</span>
+              <span class="badge bg-light text-dark border">🧄 Bawang Putih</span>
+              <span class="badge bg-success-subtle text-success border border-success-subtle">🛡️ Tanpa Kacang</span>
+            </div>
+          </div>
+          <button type="button" class="btn btn-outline-primary w-100 btn-use-inspiration sample-pill-btn" 
+                  data-bahan="ayam, bawang merah, bawang putih" data-waktu="20" data-pantangan="tanpa kacang">
+            <i class="bi bi-magic me-1"></i> Pakai Resep Ini
+          </button>
+        </div>
+
+        <!-- Inspiration Card 2 -->
+        <div class="inspiration-card">
+          <div>
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <span class="badge bg-info-subtle text-info-emphasis border border-info-subtle inspiration-badge-category">
+                🍲 Merebus
+              </span>
+              <span class="text-muted small fw-semibold">
+                <i class="bi bi-clock me-1 text-primary"></i> 15 mnt
+              </span>
+            </div>
+            <h5 class="fw-bold mb-1 text-dark">Sup Telur Tomat Sehat</h5>
+            <p class="text-muted small mb-3">
+              Kuah hangat asam manis segar tomat matang berpadu serabut telur lembut, ringan dan kaya nutrisi bagi keluarga.
+            </p>
+            <div class="d-flex flex-wrap gap-1 mb-3">
+              <span class="badge bg-light text-dark border">🥚 Telur</span>
+              <span class="badge bg-light text-dark border">🍅 Tomat</span>
+              <span class="badge bg-light text-dark border">🧅 Daun Bawang</span>
+              <span class="badge bg-success-subtle text-success border border-success-subtle">🥬 Rendah Karbo</span>
+            </div>
+          </div>
+          <button type="button" class="btn btn-outline-primary w-100 btn-use-inspiration sample-pill-btn" 
+                  data-bahan="telur, tomat, daun bawang" data-waktu="15" data-pantangan="rendah karbo">
+            <i class="bi bi-magic me-1"></i> Pakai Resep Ini
+          </button>
+        </div>
+
+        <!-- Inspiration Card 3 -->
+        <div class="inspiration-card">
+          <div>
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <span class="badge bg-danger-subtle text-danger-emphasis border border-danger-subtle inspiration-badge-category">
+                🔥 Memanggang
+              </span>
+              <span class="text-muted small fw-semibold">
+                <i class="bi bi-clock me-1 text-primary"></i> 25 mnt
+              </span>
+            </div>
+            <h5 class="fw-bold mb-1 text-dark">Tahu Tempe Bakar Manis</h5>
+            <p class="text-muted small mb-3">
+              Tahu sutra dan tempe berbalut bumbu karamel kecap manis dan ketumbar, aroma panggangan smokey menggugah selera.
+            </p>
+            <div class="d-flex flex-wrap gap-1 mb-3">
+              <span class="badge bg-light text-dark border">🧈 Tahu</span>
+              <span class="badge bg-light text-dark border">🌱 Tempe</span>
+              <span class="badge bg-light text-dark border">🧄 Bawang Putih</span>
+              <span class="badge bg-success-subtle text-success border border-success-subtle">🌿 Vegetarian</span>
+            </div>
+          </div>
+          <button type="button" class="btn btn-outline-primary w-100 btn-use-inspiration sample-pill-btn" 
+                  data-bahan="tahu, tempe, bawang putih" data-waktu="25" data-pantangan="vegetarian">
+            <i class="bi bi-magic me-1"></i> Pakai Resep Ini
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- F-08: Cooking Companion Overlay (Fullscreen Interactive Cooking Mode) -->
+  <div id="cooking-mode-overlay" class="cooking-mode-overlay d-none" role="dialog" aria-modal="true" aria-label="Mode Memasak Interaktif">
+    <div class="cooking-companion-wrapper">
+      <!-- Header -->
+      <header class="cooking-header">
+        <div class="d-flex align-items-center gap-2">
+          <span class="badge bg-primary fs-6 px-3 py-2" id="cooking-step-badge">Langkah 1 dari 1</span>
+          <h5 class="fw-bold mb-0 text-truncate" id="cooking-recipe-title" style="max-width: 450px;">Resep Masakan</h5>
+        </div>
+        <button type="button" class="btn btn-outline-dark btn-sm fw-semibold" id="btn-exit-cooking">
+          <i class="bi bi-x-lg me-1"></i> Keluar Mode Masak
+        </button>
+      </header>
+
+      <!-- Progress bar -->
+      <div class="progress mt-2" style="height: 6px;">
+        <div class="progress-bar bg-primary" id="cooking-progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+      </div>
+
+      <!-- Main Step Body -->
+      <div class="cooking-body">
+        <!-- Visual Action Card (CC-05, Tabel 8) -->
+        <div id="cooking-action-card-container" class="mb-3"></div>
+
+        <!-- Instruction Text (NFR-09, Large Text) -->
+        <div class="cooking-instruction-text" id="cooking-instruction-text">
+          Instruksi memasak akan tampil di sini.
+        </div>
+
+        <!-- Smart Step Timer (CC-03, CC-04, KF-17) -->
+        <div id="cooking-timer-container" class="cooking-timer-container d-none my-3">
+          <div class="d-flex align-items-center justify-content-center gap-2 mb-2 text-primary fw-semibold">
+            <i class="bi bi-stopwatch fs-5"></i>
+            <span>Smart Step Timer</span>
+          </div>
+          <div class="timer-digits my-2" id="timer-display">00:00</div>
+          <div class="d-flex justify-content-center gap-2 mt-3">
+            <button type="button" class="btn btn-primary btn-lg px-4 fw-semibold" id="btn-timer-start">
+              <i class="bi bi-play-fill me-1"></i> Mulai Timer
+            </button>
+            <button type="button" class="btn btn-warning btn-lg px-4 fw-semibold d-none" id="btn-timer-pause">
+              <i class="bi bi-pause-fill me-1"></i> Jeda
+            </button>
+            <button type="button" class="btn btn-outline-secondary btn-lg px-3" id="btn-timer-reset">
+              <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
+            </button>
+          </div>
+          <div id="timer-alarm-alert" class="alert alert-success d-none mt-3 mb-0 fw-bold">
+            <i class="bi bi-bell-fill me-2 fs-5"></i> Waktu memasak selesai! Langkah ini telah mencapai durasi yang ditentukan.
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Navigation & Controls -->
+      <footer class="cooking-footer">
+        <!-- Voice controls (CC-02, CC-06, NFR-10) -->
+        <div id="cooking-voice-controls" class="d-flex align-items-center gap-2">
+          <button type="button" class="btn btn-outline-primary fw-semibold" id="btn-voice-speak">
+            <i class="bi bi-volume-up-fill me-1"></i> Baca Langkah
+          </button>
+          <button type="button" class="btn btn-outline-danger fw-semibold d-none" id="btn-voice-stop">
+            <i class="bi bi-volume-mute-fill me-1"></i> Hentikan Suara
+            <span class="sound-waves-indicator"><span></span><span></span><span></span></span>
+          </button>
+        </div>
+
+        <div class="d-none d-md-flex align-items-center text-muted small">
+          <span class="badge bg-white text-secondary border px-2 py-1"><kbd class="bg-light text-dark border">←</kbd> <kbd class="bg-light text-dark border">→</kbd> Navigasi Langkah</span>
+        </div>
+
+        <!-- Step navigation buttons -->
+        <div class="d-flex align-items-center gap-2 ms-auto">
+          <button type="button" class="btn btn-outline-secondary btn-lg px-4 fw-semibold" id="btn-step-prev">
+            <i class="bi bi-chevron-left me-1"></i> Sebelumnya
+          </button>
+          <button type="button" class="btn btn-primary btn-lg px-4 fw-semibold" id="btn-step-next">
+            Selanjutnya <i class="bi bi-chevron-right ms-1"></i>
+          </button>
+          <button type="button" class="btn btn-success btn-lg px-4 fw-semibold d-none" id="btn-step-finish">
+            <i class="bi bi-check2-circle me-1"></i> Selesai
+          </button>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Logout Confirmation Modal (UC-03) -->
+  <div class="modal fade" id="modalLogout" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title fw-bold">Konfirmasi Keluar</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          Apakah Anda yakin ingin keluar dari akun Smart Recipe Generator?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+          <button type="button" class="btn btn-danger" id="btn-confirm-logout">Ya, Keluar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1100">
+    <div id="appToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body" id="toast-message"></div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="py-3 text-center">
+    <div class="container">
+      <small>© 2026 Smart Recipe Generator. Dibuat dengan Spec-Driven Execution.</small>
+    </div>
+  </footer>
+
+  <!-- Bootstrap 5 Bundle JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Shared Spec Rules & Modules -->
+  <script src="/shared/spec-rules.js"></script>
+  <script src="/shared/specValidator.js"></script>
+  <script src="/shared/timerParser.js"></script>
+  <script src="/shared/cookingActionMapper.js"></script>
+  <!-- Cooking Companion Engine (F-08) -->
+  <script src="/js/cookingCompanion.js"></script>
+  <!-- API Client -->
+  <script src="/js/api.js"></script>
+  <!-- Homepage Logic -->
+  <script src="/js/beranda.js"></script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+node_modules/
+.env
+.DS_Store
+coverage/
+*.log
+
+# Dokumen tugas (dikumpulkan terpisah)
+new document 3.0/
+*_text.txt

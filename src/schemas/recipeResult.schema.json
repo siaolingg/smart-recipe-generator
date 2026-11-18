@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RecipeResult",
+  "type": "object",
+  "properties": {
+    "judul": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 100
+    },
+    "estimasi_waktu": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "daftar_bahan": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "nama": {
+            "type": "string",
+            "minLength": 1
+          },
+          "jumlah": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": ["nama", "jumlah"],
+        "additionalProperties": false
+      }
+    },
+    "langkah_memasak": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "required": ["judul", "estimasi_waktu", "daftar_bahan", "langkah_memasak"],
+  "additionalProperties": false
+}

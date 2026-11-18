@@ -1,0 +1,44 @@
+{
+  "name": "smart-recipe-generator",
+  "version": "1.0.0",
+  "description": "AI-Powered Web Application for Generating Cooking Recipes from Fridge Ingredients",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "jest --runInBand --coverage",
+    "test:watch": "jest --watch"
+  },
+  "keywords": [
+    "recipe",
+    "ai",
+    "gemini",
+    "spec-driven",
+    "agile",
+    "scrum"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "ajv": "^8.17.1",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-mysql-session": "^3.0.3",
+    "express-rate-limit": "^7.5.0",
+    "express-session": "^1.18.1",
+    "helmet": "^8.0.0",
+    "mysql2": "^3.12.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ]
+  }
+}

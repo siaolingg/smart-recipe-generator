@@ -15,6 +15,10 @@ const savedRecipeRoutes = require('./routes/savedRecipes');
 
 const app = express();
 
+// Di hosting (mis. Zeabur) permintaan lewat 1 proxy: pakai IP asli pengunjung
+// untuk kuota tamu, dan izinkan cookie secure saat NODE_ENV=production.
+app.set('trust proxy', 1);
+
 // Security Headers (NFR-12, NFR-13)
 app.use(helmet({
   contentSecurityPolicy: {
